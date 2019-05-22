@@ -271,18 +271,17 @@ class AtomApplication extends EventEmitter {
 
   async launch (options) {
     if (!this.configFilePromise) {
-      this.configFilePromise = this.configFile.reload()
-      // this.configFilePromise = this.configFile.watch().then(disposable => {
-      //   this.disposable.add(disposable)
-      //   this.config.onDidChange('core.titleBar', () => this.promptForRestart())
-      //   this.config.onDidChange('core.colorProfile', () => this.promptForRestart())
-      // })
-      //
-      // // TodoElectronIssue: In electron v2 awaiting the watcher causes some delay
-      // // in Windows machines, which affects directly the startup time.
-      // if (process.platform !== 'win32') {
-      //   await this.configFilePromise
-      // }
+      this.configFilePromise = this.configFile.watch().then(disposable => {
+        this.disposable.add(disposable)
+        this.config.onDidChange('core.titleBar', () => this.promptForRestart())
+        this.config.onDidChange('core.colorProfile', () => this.promptForRestart())
+      })
+
+      // TodoElectronIssue: In electron v2 awaiting the watcher causes some delay
+      // in Windows machines, which affects directly the startup time.
+      if (process.platform !== 'win32') {
+        await this.configFilePromise
+      }
     }
 
     let optionsForWindowsToOpen = []

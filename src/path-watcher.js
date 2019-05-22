@@ -281,7 +281,7 @@ class NSFWNativeWatcher extends NativeWatcher {
 
     this.watcher = await nsfw(
       this.normalizedPath,
-      events => process.nextTick(() => handler(events)),
+      handler,
       {debounceMS: 100, errorCallback: this.onError}
     )
 
